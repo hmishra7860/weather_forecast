@@ -1,0 +1,4 @@
+.env
+content.json
+_pycache_/
+__pycache__/    
