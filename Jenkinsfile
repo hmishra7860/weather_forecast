@@ -39,7 +39,7 @@ pipeline{
                 sh '''
                    set -e 
                 
-                   sudo podman rm -f ${CONTAINER}
+                   sudo podman rm -f ${CONTAINER} || true
 
                    echo "starting new container"
                    
