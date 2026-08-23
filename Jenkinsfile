@@ -38,14 +38,16 @@ pipeline{
             steps {
                 sh '''
                    set -e 
-                   
+                
+                   sudo podman rm -f ${CONTAINER}
+
                    echo "starting new container"
                    
-                   podman run -dt --name ${CONTAINER} -p 8000:8501/tcp ${IMAGE_NAME}:${IMAGE_TAG}
+                   sudo podman run -dt --name ${CONTAINER} -p 8000:8501/tcp ${IMAGE_NAME}:${IMAGE_TAG}
                    
                    echo "container started"
                    
-                   podman ps --filter name=${CONTAINER}
+                   sudo podman ps --filter name=${CONTAINER}
                    
                    '''
                    
