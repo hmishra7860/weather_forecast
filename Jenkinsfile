@@ -39,10 +39,6 @@ pipeline{
                 sh '''
                    set -e 
                    
-                   echo "Stopping old container"
-                   
-                   podman rm -f ${CONTAINER} || true
-                   
                    echo "starting new container"
                    
                    podman run -dt --name ${CONTAINER} -p 8000:8501/tcp ${IMAGE_NAME}:${IMAGE_TAG}
