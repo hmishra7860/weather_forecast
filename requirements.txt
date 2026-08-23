@@ -2,4 +2,6 @@ requests
 Pillow
 streamlit
 requests
+python-dotenv
+plotly
 
