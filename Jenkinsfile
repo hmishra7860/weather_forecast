@@ -43,11 +43,11 @@ pipeline{
 
                    echo "starting new container"
                    
-                   sudo podman run -dt --name ${CONTAINER} -p 8000:8501/tcp ${IMAGE_NAME}:${IMAGE_TAG}
+                   podman run -dt -p 8000:8501/tcp ${IMAGE_NAME}:${IMAGE_TAG}
                    
                    echo "container started"
                    
-                   sudo podman ps --filter name=${CONTAINER}
+                   podman ps --filter name=${CONTAINER}
                    
                    '''
                    
