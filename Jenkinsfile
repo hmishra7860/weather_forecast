@@ -1,6 +1,6 @@
 pipeline{
     agent{
-        label 'client'
+        label 'rhel-client'
     }
     environment {
         IMAGE_NAME= "my-python-app"
