@@ -1,6 +1,6 @@
 pipeline{
     agent{
-        label:client
+        label 'client'
     }
     environment {
         IMAGE_NAME= "my-python-app"
