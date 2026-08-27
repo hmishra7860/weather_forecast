@@ -47,34 +47,35 @@ pipeline {
             }
         }
 
-        stage('Run Container') {
-    steps {
-        sh '''
-            set -e
+        stage('Deploy Container') {
+            steps {
+                sh '''
+                    set -e
 
-            echo "Stopping old container..."
-            podman stop ${CONTAINER} 2>/dev/null || true
+                    echo "Stopping old container..."
+                    podman stop ${CONTAINER} 2>/dev/null || true
 
-            echo "Removing old container..."
-            podman rm ${CONTAINER} 2>/dev/null || true
+                    echo "Removing old container..."
+                    podman rm ${CONTAINER} 2>/dev/null || true
 
-            echo "Starting new container..."
+                    echo "Starting new container..."
 
-            podman run -d \
-                --name ${CONTAINER} \
-                -p 8000:8501 \
-                ${IMAGE_NAME}:${IMAGE_TAG}
+                    JENKINS_NODE_COOKIE=dontKillMe \
+                    podman run -d \
+                        --name ${CONTAINER} \
+                        -p 8000:8501 \
+                        ${IMAGE_NAME}:${IMAGE_TAG}
 
-            sleep 5
+                    sleep 5
 
-            echo "===== CONTAINER STATUS ====="
-            podman ps -a --filter name=${CONTAINER}
+                    echo "===== Container Status ====="
+                    podman ps -a --filter name=${CONTAINER}
 
-            echo "===== CONTAINER LOGS ====="
-            podman logs ${CONTAINER}
-        '''
-    }
-}
+                    echo "===== Container Logs ====="
+                    podman logs ${CONTAINER}
+                '''
+            }
+        }
     }
 
     post {
