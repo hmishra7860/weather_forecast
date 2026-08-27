@@ -45,7 +45,7 @@ pipeline{
 
                    echo "starting new container"
                    
-                   podman run -dt -p 8000:8501/tcp ${IMAGE_NAME}:${IMAGE_TAG}
+                   podman run -d -p 8000:8501/tcp ${IMAGE_NAME}:${IMAGE_TAG}
                    
                    echo "container started"
                    
