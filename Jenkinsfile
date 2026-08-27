@@ -48,35 +48,33 @@ pipeline {
         }
 
         stage('Run Container') {
-            steps {
-                sh '''
-                    set -e
+    steps {
+        sh '''
+            set -e
 
-                    echo "Stopping old container..."
-                    podman stop ${CONTAINER} || true
+            echo "Stopping old container..."
+            podman stop ${CONTAINER} 2>/dev/null || true
 
-                    echo "Removing old container..."
-                    podman rm ${CONTAINER} || true
+            echo "Removing old container..."
+            podman rm ${CONTAINER} 2>/dev/null || true
 
-                    echo "Starting new container..."
+            echo "Starting new container..."
 
-                    podman run -d \
-                        --name ${CONTAINER} \
-                        -p 8000:8501 \
-                        ${IMAGE_NAME}:${IMAGE_TAG}
+            podman run -d \
+                --name ${CONTAINER} \
+                -p 8000:8501 \
+                ${IMAGE_NAME}:${IMAGE_TAG}
 
-                    echo "Container started"
+            sleep 5
 
-                    sleep 5
+            echo "===== CONTAINER STATUS ====="
+            podman ps -a --filter name=${CONTAINER}
 
-                    echo "Container status:"
-                    podman ps -a --filter name=${CONTAINER}
-
-                    echo "Container logs:"
-                    podman logs ${CONTAINER}
-                '''
-            }
-        }
+            echo "===== CONTAINER LOGS ====="
+            podman logs ${CONTAINER}
+        '''
+    }
+}
     }
 
     post {
