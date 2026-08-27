@@ -64,6 +64,7 @@ pipeline {
                     podman run -d \
                         --name ${CONTAINER} \
                         -p 8000:8501 \
+                        -e API_KEY="${API_KEY}" \
                         ${IMAGE_NAME}:${IMAGE_TAG}
 
                     sleep 5
