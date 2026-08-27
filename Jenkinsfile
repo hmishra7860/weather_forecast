@@ -1,5 +1,7 @@
 pipeline{
-    agent any
+    agent{
+        label:client
+    }
     environment {
         IMAGE_NAME= "my-python-app"
         IMAGE_TAG= "${BUILD_NUMBER}"
