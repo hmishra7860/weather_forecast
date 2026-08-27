@@ -49,32 +49,30 @@ pipeline {
 
         stage('Deploy Container') {
             steps {
-                sh '''
-                    set -e
+                withCredentials([
+                    string(
+                        credentialsId: 'weather-api-key',
+                        variable: 'API_KEY'
+                    )
+                ]) {
+                    sh '''
+                        set -e
 
-                    echo "Stopping old container..."
-                    podman stop ${CONTAINER} 2>/dev/null || true
+                        podman stop ${CONTAINER} 2>/dev/null || true
+                        podman rm ${CONTAINER} 2>/dev/null || true
 
-                    echo "Removing old container..."
-                    podman rm ${CONTAINER} 2>/dev/null || true
+                        JENKINS_NODE_COOKIE=dontKillMe \
+                        podman run -d \
+                            --name ${CONTAINER} \
+                            -p 8000:8501 \
+                            -e API_KEY="${API_KEY}" \
+                            ${IMAGE_NAME}:${IMAGE_TAG}
 
-                    echo "Starting new container..."
+                        sleep 5
 
-                    JENKINS_NODE_COOKIE=dontKillMe \
-                    podman run -d \
-                        --name ${CONTAINER} \
-                        -p 8000:8501 \
-                        -e API_KEY="${API_KEY}" \
-                        ${IMAGE_NAME}:${IMAGE_TAG}
-
-                    sleep 5
-
-                    echo "===== Container Status ====="
-                    podman ps -a --filter name=${CONTAINER}
-
-                    echo "===== Container Logs ====="
-                    podman logs ${CONTAINER}
-                '''
+                        podman ps -a --filter name=${CONTAINER}
+                    '''
+                }
             }
         }
     }
